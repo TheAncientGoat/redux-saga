@@ -58,11 +58,14 @@ export interface SagaMiddleware<C = {}> extends Middleware {
 
   setContext(props: Partial<C>): void;
 }
+interface onErrorRuntime {
+  sagaStack: string
+}
 
 export interface SagaMiddlewareOptions<C extends object = {}> {
   context?: C;
   sagaMonitor?: Monitor;
-  onError?(error: Error): void;
+  onError?(error: Error, runtimeInfo: onErrorRuntime): void;
   effectMiddlewares?: EffectMiddleware[];
 }
 
@@ -77,7 +80,7 @@ export interface RunSagaOptions<A, S> {
   context?: object;
   sagaMonitor?: Monitor;
   effectMiddlewares?: EffectMiddleware[];
-  onError?(error: Error): void;
+  onError?(error: Error, runtimeInfo: onErrorRuntime): void;
 }
 
 export function runSaga<A, S>(
